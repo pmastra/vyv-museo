@@ -11,23 +11,40 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 describe('Persona', () => {
-    beforeEach((done) => {
+
+
+ /*   beforeEach((done) => {
         Persona.remove({}, (err) => {
             done();
         });
     });
-
+*/
     describe('/GET personas', () => {
-        it('it should GET all the persons', (done) => {
+        it('Esto deberia retornar todas las Personas', (done) => {
             chai.request(index)
                 .get('/api/persona')
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('array');
-                    res.body.length.should.be.eql(0);
+                    res.body.personas.should.be.a('array');
+                    res.body.personas.length.should.be.eql(0);
                 done();
                 });
         });
     });
+
+    describe('/POST persona', () => {
+        it('Esto deberia retornar la Persona insertada', (done) => {
+            chai.request(index)
+                .get('/api/persona')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.personas.should.be.a('array');
+                    res.body.personas.length.should.be.eql(0);
+                done();
+                });
+        });
+    });
+
+
 
 });
