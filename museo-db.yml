@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+ museo:  
+  image: mongo
+  container_name: museo_db
+  ports:
+    - 27017:27017
