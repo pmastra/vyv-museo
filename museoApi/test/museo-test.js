@@ -179,8 +179,12 @@ describe('/GET personas', () => {
             .end((err, res) => {
 
                 res.should.have.status(200);
-               // res.body.personas.should.be.a('array');
-
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.persona.should.have.property('_id');
+                res.body.persona.should.have.property('dni');
+                res.body.persona.dni.should.be.eql(personaId);
+            });           
                 done();
             });
     });
