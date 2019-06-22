@@ -6,45 +6,116 @@ let Persona = require('../models/persona');
 //Require the dev-dependencies
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let index = require('../index');
+let servidor = require('../index');
 let should = chai.should();
 
 chai.use(chaiHttp);
 describe('Persona', () => {
 
-
- /*   beforeEach((done) => {
+/*
+    beforeEach((done) => {
         Persona.remove({}, (err) => {
             done();
         });
     });
 */
+
+    after(function() {
+        servidor.close();
+    });
+
     describe('/GET personas', () => {
         it('Esto deberia retornar todas las Personas', (done) => {
-            chai.request(index)
+            chai.request(servidor)
                 .get('/api/persona')
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.personas.should.be.a('array');
-                    res.body.personas.length.should.be.eql(0);
+
+                   // res.body.personas.length.should.be.eql(0);
                 done();
                 });
         });
     });
 
-    describe('/POST persona', () => {
-        it('Esto deberia retornar la Persona insertada', (done) => {
-            chai.request(index)
-                .get('/api/persona')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.personas.should.be.a('array');
-                    res.body.personas.length.should.be.eql(0);
-                done();
-                });
-        });
-    });
 
+
+
+        describe('/POST personas', () => {
+            it('Esto deberia retornar la Persona insertada junto con si _id de mongo', (done) => {
+                chai.request(servidor)
+                    .post('/api/persona')
+                    .send(
+                        {
+                            "nombres":"facu2",
+                            "apellidos":"paterno2",
+                            "dni":"12345678",
+                            "fechaInicio": "2010-10-10",
+                            "foto":"hola"
+                        }
+                      )
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.should.be.json;
+                        res.body.should.be.a('object');
+                        res.body.persona.should.have.property('_id');
+                    done();
+                    });
+            });
+            it('No deberia dejar insertar una persona vacia', (done) => {
+                chai.request(servidor)
+                    .post('/api/persona')
+                    .send(
+                        {
+                            
+                        }
+                      )
+                    .end((err, res) => {
+                        res.should.have.status(500);
+                        res.should.be.json;
+                        res.body.should.be.a('object');
+                        response.body.should.have.property('message');
+
+                    done();
+                    });
+            });
+
+            it('No deberia dejar dar de alta a 2 personas con DNI igual', function(done) {
+                var dni='38491676'
+                chai.request(servidor)
+                  .post('/api/persona')
+                  .send(
+                    {
+                        "nombres":"facu1",
+                        "apellidos":"paterno1",
+                        "dni":dni,
+                        "fechaInicio": "2010-10-10",
+                        "foto":"hola"
+                    }
+                  )
+                  .end(function(err, res){
+                    chai.request(servidor)
+                      .post('/api/persona')
+                      .send(
+                        {
+                            "nombres":"facu2",
+                            "apellidos":"paterno2",
+                            "dni":dni,
+                            "fechaInicio": "2010-10-10",
+                            "foto":"hola"
+                        }
+                      )
+                      .end(function(error, response){
+                        response.should.have.status(500);
+                       
+                        done();
+                    });
+                  });
+              });
+
+    
+        });
+       
 
 
 });

@@ -30,7 +30,7 @@ function getPersonas(req, res){
 
 function savePersona(req,res){
     console.log('POST /api/persona')
-    console.log(req.body)
+  //  console.log(req.body)
       
     let persona = new Persona()
     persona.nombres = req.body.nombres
