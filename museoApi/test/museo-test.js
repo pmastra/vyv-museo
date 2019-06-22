@@ -125,21 +125,21 @@ describe('/POST personas', () => {
 
 
 describe('/PUT personas', () => {
-    it('Esto deberia retornar todas las Personas', (done) => {
+    it('Se deberia actualizar los datos de una Persona', (done) => {
         var personaId='12345678'
-
+        var nuevoNombre="Pepe2"
+        var nuevoApellido="Argento2"
         chai.request(servidor)
-            .get('/api/persona/'+personaId)
+            .get('/api/personaDni/'+personaId)
             .end((err, res) => {
 
-                var persona=res.body.persona;
-                var personaId=persona._id;
+                var personaId=res.body.persona._id;
 
                 chai.request(servidor)
                     .put('/api/persona/'+personaId)
                     .send({
-                        "nombres":"Pepe2",
-                        "apellidos":"Argento2",
+                        "nombres":nuevoNombre,
+                        "apellidos":nuevoApellido,
                         "dni":"12345678",
                         "fechaInicio": "2010-10-10",
                         "foto":"hola"
@@ -149,6 +149,9 @@ describe('/PUT personas', () => {
                         res.should.be.json;
                         res.body.should.be.a('object');
                         res.body.persona.should.have.property('_id');
+                        res.body.persona.nombres.should.be.eql(nuevoNombre);
+                        res.body.persona.apellidos.should.be.eql(nuevoApellido);
+
                     });           
                 done();
             });
@@ -172,7 +175,7 @@ describe('/GET personas', () => {
 
     it('Esto deberia retornar una Persona si encuentra por su dni', (done) => {
 
-        var personaId=12345678;
+        var personaId=12345678;//DNI
 
         chai.request(servidor)
             .get('/api/personaDni/'+personaId)
@@ -184,9 +187,69 @@ describe('/GET personas', () => {
                 res.body.persona.should.have.property('_id');
                 res.body.persona.should.have.property('dni');
                 res.body.persona.dni.should.be.eql(personaId);
+               // res.body.persona.length.should.be.isAtMost(1);
+                
                 done();
             });
     });
+
+    it('Esto deberia retornar una Persona existente si encuentra por su _id Mongo', (done) => {
+
+        var personaId=12345678;//DNI
+
+        chai.request(servidor)
+            .get('/api/personaDni/'+personaId)
+            .end((err, res) => {
+
+                var personaId=res.body.persona._id;
+
+                chai.request(servidor)
+                    .get('/api/personaId/'+personaId)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.should.be.json;
+                        res.body.should.be.a('object');
+                        res.body.personaId.should.have.property('_id');
+                        res.body.personaId._id.should.be.eql(personaId);
+
+                    });           
+                done();
+            });
+    });
+
+    it('Esto deberia retornar 404 si una Persona no existe por su _id Mongo', (done) => {
+
+        var personaId=1234000;
+
+        chai.request(servidor)
+            .get('/api/personaId/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.have.property('message');
+
+                done();
+
+            });           
+    });
+
+    it('Esto NO deberia retornar una Persona si se reciben parametros incorrectos', (done) => {
+
+        var personaId='SOY UN PARAMETRO INCORRECTO';
+
+        chai.request(servidor)
+            .get('/api/personaId/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.have.property('message');
+
+                done();
+
+            });           
+    });
+
+
+
+
 }); 
 
 });
