@@ -184,10 +184,9 @@ describe('/GET personas', () => {
                 res.body.persona.should.have.property('_id');
                 res.body.persona.should.have.property('dni');
                 res.body.persona.dni.should.be.eql(personaId);
-            });           
                 done();
             });
     });
-});
+}); 
 
 });
