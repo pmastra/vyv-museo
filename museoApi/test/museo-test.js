@@ -567,30 +567,57 @@ describe('Persona', () => {
 
 
 
+    it('Deberia retornar (200) al borrar una Persona existente /DELETE personas', (done) => {
+        var personaDni=12345678;//DNI
+
+        chai.request(servidor)
+        .get('/api/personaDni/'+personaDni)
+        .end((err, res) => {
+
+            var personaId=res.body.persona._id;
+            chai.request(servidor)
+                .delete('/api/persona/'+personaId)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.should.be.json;
+                    res.body.should.be.a('object');
+                    console.log(res.body)
+                    res.body.should.have.property('message');
+                    
+
+                    done();
+
+                });           
+        });         
+    });
+
+    it('Deberia retornar (404) al borrar una Persona que NO existe /DELETE personas', (done) => {
+
+        var personaId=88888888;
+        chai.request(servidor)
+            .delete('/api/persona/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
 
 
+    it('Deberia retornar (500) al recibir un _id mongo erroneo (undefined) /DELETE personas', (done) => {
 
+        var personaId;
+        chai.request(servidor)
+            .delete('/api/persona/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
 
+            });           
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-});
+});//Fin tests para persona
