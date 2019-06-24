@@ -57,7 +57,7 @@ describe('Persona', () => {
                 res.should.be.json;
                 res.body.should.be.a('object');
                 res.body.persona.should.have.property('_id');
-            done();
+                done();
             });
     });
 
@@ -70,7 +70,7 @@ describe('Persona', () => {
                 res.should.be.json;
                 res.body.should.be.a('object');
                 res.body.should.have.property('message');
-            done();
+                done();
             });
     });
 /*
@@ -120,10 +120,10 @@ describe('Persona', () => {
                 }
                 )
                 .end(function(error, res){
-                res.should.have.status(500);
-                
-                done();
-            });
+                    res.should.have.status(500);
+                    
+                    done();
+                });
             });
         });
 
@@ -162,15 +162,12 @@ describe('Persona', () => {
                         res.should.be.json;
                         res.body.should.be.a('object');
                         res.body.persona.should.have.property('_id');
-                      //  res.body.persona.nombres.should.be.eql(nuevoNombre);
-                        //res.body.persona.apellidos.should.be.eql(nuevoApellido);
-
+                        done();
                     });           
-                done();
             });
     });
 
-    it('Deberia dar error 500 al cambiar _id (pkey) por uno igual, ya existente /PUT personas', (done) => {
+    it('Deberia dar error (500) al cambiar _id (pkey) por uno igual, ya existente /PUT personas', (done) => {
         var personaDni1='12345678';
         var personaDni2='11111111';
 
@@ -213,19 +210,18 @@ describe('Persona', () => {
 
 
 
-    it('Esto deberia retornar todas las Personas /GET personas', (done) => {
+    it('Esto deberia retornar todas las Personas (200) /GET personas', (done) => {
         chai.request(servidor)
             .get('/api/persona')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.personas.should.be.a('array');
 
-               // res.body.personas.length.should.be.eql(0);
             done();
             });
     });
 
-    it('Esto deberia retornar una Persona si encuentra por su dni /GET personas', (done) => {
+    it('Esto deberia retornar una Persona (200) si encuentra por su dni /GET personas', (done) => {
 
         var personaDni=12345678;//DNI
 
@@ -239,13 +235,12 @@ describe('Persona', () => {
                 res.body.persona.should.have.property('_id');
                 res.body.persona.should.have.property('dni');
                 res.body.persona.dni.should.be.eql(personaDni);
-               // res.body.persona.length.should.be.isAtMost(1);
                 
                 done();
             });
     });
 
-    it('Esto deberia retornar una Persona existente si encuentra por su _id Mongo /GET personas', (done) => {
+    it('Esto deberia retornar una Persona existente (200) si encuentra por su _id Mongo /GET personas', (done) => {
 
         var personaDni=12345678;//DNI
 
@@ -263,13 +258,13 @@ describe('Persona', () => {
                         res.body.should.be.a('object');
                         res.body.personaId.should.have.property('_id');
                         res.body.personaId._id.should.be.eql(personaId);
-
+                        done();
                     });           
-                done();
+               
             });
     });
 
-    it('Esto deberia retornar 404 si una Persona no existe por su _id Mongo /GET personas', (done) => {
+    it('Esto deberia retornar (404) si una Persona no existe por su _id Mongo /GET personas', (done) => {
 
         var personaId=1234000;
 
@@ -284,7 +279,7 @@ describe('Persona', () => {
             });           
     });
 
-    it('Esto NO deberia retornar una Persona si se reciben parametros incorrectos /GET personas', (done) => {
+    it('Esto NO deberia retornar una Persona (500) si se reciben parametros incorrectos /GET personas', (done) => {
 
         var personaId='SOY UN ID INCORRECTO';
 
@@ -319,7 +314,6 @@ describe('Persona', () => {
     });
 
     it('Deberia retornar al menos UNA (200) Persona que coincida con los Filtros /GET personas', (done) => {
-
         var dni='';
         var nombres='Moni';
         var apellidos='Argento';
@@ -352,7 +346,7 @@ describe('Persona', () => {
             });           
     });
 
-    it('Deberia retornar CERO (404) Personas ya que los Filtros son Vacios /GET personas', (done) => {
+    it('Deberia retornar ERROR (500) Personas ya que los Filtros son Vacios /GET personas', (done) => {
 
         var dni='';
         var nombres='';
@@ -360,9 +354,8 @@ describe('Persona', () => {
         chai.request(servidor)
             .get('/api/personasFiltro/'+dni+'&'+nombres+'&'+apellidos)
             .end((err, res) => {
-                res.should.have.status(404);
+                res.should.have.status(500);
                 res.body.should.be.a('object');
-               // console.log(res.body)
                 res.body.should.have.property('message');
                 done();
 
@@ -371,9 +364,9 @@ describe('Persona', () => {
 
     it('Deberia retornar ERROR (500) Personas ya que los Filtros son Undefined /GET personas', (done) => {
 
-        var dni='';
-        var nombres='';
-        var apellidos='';
+        var dni;
+        var nombres;
+        var apellidos;
         chai.request(servidor)
             .get('/api/personasFiltro/'+dni+'&'+nombres+'&'+apellidos)
             .end((err, res) => {
@@ -400,6 +393,191 @@ describe('Persona', () => {
 
             });           
     });
+
+
+
+    it('Esto deberia retornar el nombre de Persona existente (200) si encuentra por su _id Mongo /GET personas', (done) => {
+
+        var personaDni=12345678;//DNI
+
+        chai.request(servidor)
+            .get('/api/personaDni/'+personaDni)
+            .end((err, res) => {
+
+                var personaId=res.body.persona._id;
+
+                chai.request(servidor)
+                    .get('/api/personaName/'+personaId)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.should.be.json;
+                        res.body.should.be.a('object');
+                        res.body.personas.should.have.property('nombres');
+                        done();
+
+                    });           
+            });
+    });
+
+    it('Esto deberia retornar Error (404) si NO encuentra el nombre de una Persona por su _id Mongo /GET personas', (done) => {
+
+        var personaId=55555555;
+
+        chai.request(servidor)
+            .get('/api/personaName/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Esto deberia retornar Error (500) si el _id Mongo es erroneo para obtener el nombre de una Persona /GET personas', (done) => {
+
+        var personaId;
+
+        chai.request(servidor)
+            .get('/api/personaName/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('[Leer comentarios - NO PASA] Esto deberia retornar el Apellido de Persona existente (200) si encuentra por su _id Mongo /GET personas', (done) => {
+
+        var personaDni=12345678;//DNI
+
+        chai.request(servidor)
+            .get('/api/personaDni/'+personaDni)
+            .end((err, res) => {
+
+                var personaId=res.body.persona._id;
+                chai.request(servidor)
+                    .get('/api/personaApellido/'+personaId)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.should.be.json;
+                        res.body.should.be.a('object');
+                        done();
+
+                    });           
+            });
+    });
+
+    it('Esto deberia retornar Error (404) si NO encuentra el Apellido de una Persona por su _id Mongo /GET personas', (done) => {
+
+        var personaId=55555555;
+
+        chai.request(servidor)
+            .get('/api/personaApellido/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Esto deberia retornar Error (500) si el _id Mongo es erroneo para obtener el Apellido de una Persona /GET personas', (done) => {
+
+        var personaId;
+
+        chai.request(servidor)
+            .get('/api/personaApellido/'+personaId)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+            });           
+    });
+
+
+
+    it('Deberia retornar UNA (200) Persona que coincida con el Nombre y Apellido /GET personas', (done) => {
+
+        var nombres='Moni';
+        var apellidos='Argento';
+        chai.request(servidor)
+            .get('/api/personaNombreApellido/'+nombres+'&'+apellidos)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.personas[0].should.have.property('_id');
+                res.body.personas.length.should.be.eql(1)
+                done();
+
+            });           
+    });
+
+
+    it('Deberia retornar CERO (404) Personas ya que no coinciden con el Nombre y Apellido /GET personas', (done) => {
+
+        var nombres='No';
+        var apellidos='Existo';
+        chai.request(servidor)
+            .get('/api/personaNombreApellido/'+nombres+'&'+apellidos)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar CERO (404) Personas ya que el Nombre y Apellido son Vacios /GET personas', (done) => {
+
+        var nombres='';
+        var apellidos='';
+        chai.request(servidor)
+            .get('/api/personaNombreApellido/'+nombres+'&'+apellidos)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar ERROR (500) Personas ya que el Nombre y Apellido son Undefined /GET personas', (done) => {
+
+        var nombres;
+        var apellidos;
+        chai.request(servidor)
+            .get('/api/personaNombreApellido/'+nombres+'&'+apellidos)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
