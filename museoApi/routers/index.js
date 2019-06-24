@@ -20,10 +20,10 @@ api.get('/persona', personaCtrl.getPersonas)
 api.get('/personaId/:personaId', personaCtrl.getPersonaId)
 api.get('/personaDni/:personaId', personaCtrl.getPersonaDni)
 api.post('/persona', personaCtrl.savePersona)
-api.delete('/persona/:personaId',personaCtrl.deletePersona) // borra el producto cuyo id es productId
-api.put('/persona/:personaId',personaCtrl.updatePersona) // actualiza un producto
+api.delete('/persona/:personaId',personaCtrl.deletePersona) 
+api.put('/persona/:personaId',personaCtrl.updatePersona) 
 api.get('/personasFiltro/:unDni&:unNombre&:unApellido', personaCtrl.getPersonasFiltro)
-api.get('/personaNroDoc/:personaId', personaCtrl.getPersonaNroDoc)
+api.get('/personaNroDoc/:personaId', personaCtrl.getPersonaNroDoc)//Misma funcion que /personaDni
 api.get('/personaName/:personaId', personaCtrl.getPersonaName)
 api.get('/personaApellido/:personaId', personaCtrl.getPersonaApellido)
 api.get('/personaNombreApellido/:unNombre&:unApellido', personaCtrl.getPersonaNombreApellido)

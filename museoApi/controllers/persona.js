@@ -29,7 +29,6 @@ function getPersonas(req, res){
 }
 
 function savePersona(req,res){
-    console.log('POST /api/persona')
   //  console.log(req.body)
       
     let persona = new Persona()
