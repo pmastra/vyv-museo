@@ -15,9 +15,9 @@ crearArea = areaData => {
   // };
   
   const area = new Area({
-    nombre: 'area 1',
-    idCiudad: 14, // Neuquen
-    idProvincia: 14, // Neuquen
+    nombre: 'area 2',
+    idCiudad: 15, // Neuquen
+    idProvincia: 15, // Neuquen
     idPais: 1, //Argetina
     // locacion,
   });
