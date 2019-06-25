@@ -134,7 +134,7 @@ crearExcavacion = (req, res) => {
         .catch(() => res.status(500).send({ message: 'Error al insertar la excavacion en la Base de Datos'}))
     })
   })
-  .catch(() => res.status(500).send({ message: 'Error al crear el area de la excavacion en la Base de Datos' }));
+  .catch(() => res.status(500).send({ message: 'Error al crear el area de la excavacion en la Base de Datos (Excavacion)' }));
 };
 
 modificarAreaExcavacion = (req, res) => {

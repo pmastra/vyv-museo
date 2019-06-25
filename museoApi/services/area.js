@@ -4,22 +4,22 @@ const Area = require('../models/area');
 getAreaById = idArea => Area.findById(idArea);
 
 crearArea = areaData => {
-  const coordinates = [];
-  areaData.puntos.forEach(punto => {
-    coordinates.push([punto.lat, punto.lng]);
-  });
-  coordinates.push([areaData.puntos[0].lat, areaData.puntos[0].lng])
-  const locacion = {
-    type: 'Polygon',
-    coordinates: [coordinates],
-  };
+  // const coordinates = [];
+  // areaData.puntos.forEach(punto => {
+  //  coordinates.push([punto.lat, punto.lng]);
+  // });
+  // coordinates.push([areaData.puntos[0].lat, areaData.puntos[0].lng])
+  // const locacion = {
+  //   type: 'Polygon',
+  //   coordinates: [coordinates],
+  // };
   
   const area = new Area({
     nombre: 'area 1',
     idCiudad: 14, // Neuquen
     idProvincia: 14, // Neuquen
     idPais: 1, //Argetina
-    locacion,
+    // locacion,
   });
 
   return area.save();
