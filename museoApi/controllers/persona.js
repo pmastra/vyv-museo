@@ -29,8 +29,7 @@ function getPersonas(req, res){
 }
 
 function savePersona(req,res){
-    console.log('POST /api/persona')
-    console.log(req.body)
+  //  console.log(req.body)
       
     let persona = new Persona()
     persona.nombres = req.body.nombres
@@ -68,9 +67,7 @@ function deletePersona(req,res){
 function updatePersona(req,res){
     let personaId= req.params.personaId
     let update= req.body
-    console.log('POST /api/persona/:PersonaId UpdatePersona......')
-    console.log(req.body)
-    
+  
     Persona.findByIdAndUpdate(personaId, update, (err, personaUpdate)=>{
         if(err) return  res.status(500).send({message: `Error al tratar de actualizar: ${err}`})
         if(!personaUpdate) return res.status(404).send({message:`La persona Update no Existe`})

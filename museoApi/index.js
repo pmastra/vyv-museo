@@ -5,6 +5,7 @@ const app = require('./app')
 const config = require('./config')
 var server;
 
+mongoose.set('useFindAndModify', false);
 
 
 
