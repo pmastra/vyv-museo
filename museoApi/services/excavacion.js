@@ -110,10 +110,12 @@ crearExcavacion = (req, res) => {
     return servicioArea.crearArea({ puntos: req.body.areaExcavacion })
     .then(area => {
       // crear la excavacion
-      const { puntoGPSExcavacion } = req.body;
+
+      // const { puntoGPSExcavacion } = req.body;
+  
       const puntoGPS = {
         type: 'Point',
-        coordinates: [puntoGPSExcavacion.lat, puntoGPSExcavacion.lng],
+        coordinates: [2.2, 2.2],
       };
   
       const excavacion = new Excavacion({
@@ -131,7 +133,10 @@ crearExcavacion = (req, res) => {
           servicioExploracion.setearExcavacion(exploracion, excavacion._id)
           .then(() => res.status(200).send({ excavacion }))
         })
-        .catch(() => res.status(500).send({ message: 'Error al insertar la excavacion en la Base de Datos'}))
+        .catch((e) => {
+          console.log(e)
+          res.status(500).send({ message: 'Error al insertar la excavacion en la Base de Datos'})
+    })
     })
   })
   .catch(() => res.status(500).send({ message: 'Error al crear el area de la excavacion en la Base de Datos (Excavacion)' }));
