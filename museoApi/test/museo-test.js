@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test2';
 
 let mongoose = require("mongoose");
 let Persona = require('../models/persona');
@@ -12,36 +12,6 @@ let servidor = require('../index');
 let should = chai.should();
 
 chai.use(chaiHttp);
-
-describe('Exploracion', () => {
-
-    before((done) => {
-        Exploracion.deleteMany({}, (err) => {
-        });
-
-        const exploracionCtrl = require ('../controllers/exploracion')
-        exploracionCtrl.crearAreaExploracion;
-
-        done();
-
-    });
-
-    it('Esto deberia retornar la Exploracion insertada junto con su _id de mongo /POST exploracion', (done) => {
-        chai.request(servidor)
-            .post('/api/areaExploracion')
-            .send(
-                {       }
-                )
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.should.be.json;
-                res.body.should.be.a('object');
-                res.body.persona.should.have.property('_id');
-                done();
-            });
-    });
-
-});
 
 describe('Persona', () => {
 
