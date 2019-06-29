@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "mocha --timeout 10000"
+    "test": "nyc mocha --timeout 3000"
   },
   "author": "M.Andrea Chirino - 2018",
   "license": "MIT",
@@ -15,7 +15,8 @@
     "express": "^4.17.1",
     "jwt-simple": "^0.5.6",
     "moment": "^2.24.0",
-    "mongoose": "^5.6.1"
+    "mongoose": "^5.6.1",
+    "nyc": "^14.1.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",

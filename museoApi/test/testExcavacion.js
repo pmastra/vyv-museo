@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'test';
 
 let mongoose = require("mongoose");
 let Persona = require('../models/persona');
-let Exploracion = require('../models/excavacion');
+let Excavacion = require('../models/excavacion');
 let Area = require('../models/area');
 
 //Require the dev-dependencies
@@ -13,7 +13,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('GET Excavacion', () => {
+describe('GET Excavacion por id', () => {
 
     //before((done) => {
     //    Exploracion.deleteMany({}, (err) => {
@@ -26,19 +26,95 @@ describe('GET Excavacion', () => {
 
     //});
 
-    it('Esto deberia retornar la Excavacion insertada junto con su _id de mongo /POST excavacion', (done) => {
+    it('Id correcta, deberia retornarnos un 200 mas su id de mongo', (done) => {
+        let excavacion = {
+            idExcavacion: "5d129ea9bacbe8218449f4b9"
+        }
         chai.request(servidor)
-            .post('/api/areaExcavacion')
-            .send(
-                {       }
-                )
+            .get('/api/excavacionId/5d129ea9bacbe8218449f4b9')
+            //.send(excavacion.idExcavacion)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('object');
-                res.body.persona.should.have.property('_id');
+                res.body.Excavacion.should.have.property('_id');
+                done();
+            });
+    });
+    it('Id incorrecta, deberia retornar un 404', (done) => {
+        let excavacion = {
+            idExcavacion: "5d129ea9bacbe8218449f4b6"
+        }
+        chai.request(servidor)
+            .get('/api/excavacionId/5d129ea9bacbe8218449f4b9')
+            //.send(excavacion.idExcavacion)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.Excavacion.should.have.property('_id');
+                done();
+            });
+    });
+    it('Id incorrecta fuera del rago de mongo, deberia capturarnos la excepcion', (done) => {
+        let excavacion = {
+            idExcavacion: "5d129ea9bacbe8218449f4b6"
+        }
+        chai.request(servidor)
+            .get('/api/excavacionId/5d129ea9bacbe8218449f4b9')
+            //.send(excavacion.idExcavacion)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.Excavacion.should.have.property('_id');
                 done();
             });
     });
 
+});
+
+describe('POST Excavacion', () =>{
+    it('Esto deberia retornar un status 200 insertando una excavacion junto con su id de mongo', (done) =>{
+        let excavacion = {
+            exploracionId: "5d129572161e811c3410725a"
+        }
+        chai.request(servidor)
+            .post('/api/areaExcavacion')
+            .send(excavacion)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.Excavacion.should.have.property('_id');
+                done();
+        });
+    });
+    it('Esto deberia retornar un status 500 insertando una excavacion sin un id de exploracion correcto', (done) =>{
+        let excavacion = {
+            exploracionId: "5d129572161e811c34107251" //id de exploracion inexistente
+        }
+        chai.request(servidor)
+            .post('/api/areaExcavacion')
+            .send(excavacion)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.Excavacion.should.have.property('_id');
+                done();
+        });
+    });
+    it('Esto deberia retornar un status 500 insertando una excavacion sin un id de exploracion', (done) =>{
+        chai.request(servidor)
+            .post('/api/areaExcavacion')
+            .send(excavacion)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.Excavacion.should.have.property('_id');
+                done();
+        });
+    });
 });
