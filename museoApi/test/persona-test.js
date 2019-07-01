@@ -39,8 +39,8 @@ describe('Persona', () => {
 
 
 
-
-    it('Esto deberia retornar la Persona insertada junto con su _id de mongo /POST personas', (done) => {
+describe ('POST',()=>{
+    it('Esto deberia retornar la Persona insertada junto con su _id de mongo /POST personas 222', (done) => {
         chai.request(servidor)
             .post('/api/persona')
             .send(
@@ -129,6 +129,8 @@ describe('Persona', () => {
 
     
 
+});
+    
 
 
 
@@ -137,9 +139,7 @@ describe('Persona', () => {
 
 
 
-
-
-
+describe('PUT', ()=>{
     it('Se deberia actualizar los datos de una Persona /PUT personas', (done) => {
         var personaId='12345678'
         var nuevoNombre="Pepe2"
@@ -199,17 +199,11 @@ describe('Persona', () => {
                 
             });
     });
-    
+})
 
 
-
-
-
-
-
-
-
-
+ 
+describe('GET',()=>{
     it('Esto deberia retornar todas las Personas (200) /GET personas', (done) => {
         chai.request(servidor)
             .get('/api/persona')
@@ -565,8 +559,111 @@ describe('Persona', () => {
             });           
     });
 
+    it('Deberia retornar una Persona (200) ya que el Nombre y DNI existen /GET personas', (done) => {
+
+        var dni=38491676;
+        var nombres='facu1';
+
+        chai.request(servidor)
+            .get('/api/personaNombreDNI/'+nombres+'&'+dni)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.personas[0].should.have.property('_id');
+                res.body.personas.length.should.be.eql(1)
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar una ERROR (500) ya que el Nombre y DNI son undefined /GET personas', (done) => {
+
+        var dni;
+        var nombres;
+
+        chai.request(servidor)
+            .get('/api/personaNombreDNI/'+nombres+'&'+dni)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar una ERROR (404) ya que el Nombre y DNI no existen /GET personas', (done) => {
+
+        var dni=923193219;
+        var nombres='NO EXISTO';
+
+        chai.request(servidor)
+            .get('/api/personaNombreDNI/'+nombres+'&'+dni)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar una Persona (200) ya que el Apellido y DNI existen /GET personas', (done) => {
+
+        var dni=38491676;
+        var apellidos='paterno2';
+
+        chai.request(servidor)
+            .get('/api/personaApellidoDNI/'+apellidos+'&'+dni)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.personas[0].should.have.property('_id');
+                res.body.personas.length.should.be.eql(1)
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar un ERROR (500) ya que el Apellido y DNI son undefined /GET personas', (done) => {
+
+        var dni;
+        var apellidos;
+
+        chai.request(servidor)
+            .get('/api/personaApellidoDNI/'+apellidos+'&'+dni)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+    it('Deberia retornar un ERROR (404) ya que el Apellido y DNI no existen /GET personas', (done) => {
+
+        var dni=9478292;
+        var apellidos='NO EXISTO';
+
+        chai.request(servidor)
+            .get('/api/personaApellidoDNI/'+apellidos+'&'+dni)
+            .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message');
+                done();
+
+            });           
+    });
+
+})
 
 
+
+describe('DELETE',()=>{
     it('Deberia retornar (200) al borrar una Persona existente /DELETE personas', (done) => {
         var personaDni=12345678;//DNI
 
@@ -619,5 +716,9 @@ describe('Persona', () => {
 
             });           
     });
+})
+
+
+
 
 });//Fin tests para persona
