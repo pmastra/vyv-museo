@@ -77,7 +77,7 @@ describe('GET Excavacion por id', () => {
 describe('POST Excavacion', () =>{
     it('Esto deberia retornar un status 200 insertando una excavacion junto con su id de mongo', (done) =>{
         let excavacion = {
-            exploracionId: "5d129572161e811c3410725a"
+            exploracionId: "5d1793efc3a46a258cc31a1c"
         }
         chai.request(servidor)
             .post('/api/areaExcavacion')
